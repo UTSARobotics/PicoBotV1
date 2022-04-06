@@ -1,0 +1,88 @@
+//V2
+int trigPin = 9;      // trig pin of HC-SR04
+int echoPin = 10;     // Echo pin of HC-SR04
+int revleft4 = 4;      //REVerse motion of Left motor
+int fwdleft5 = 5;      //ForWard motion of Left motor
+int revright6 = 6;     //REVerse motion of Right motor
+int fwdright7 = 7;     //ForWard motion of Right motor
+long duration, distance;
+
+void setup() {
+//V1
+// put your setup code here, to run once:
+pinMode(8, OUTPUT); //the pinMode command sets if your pin is an output or input
+pinMode(9, OUTPUT); // it accepts the number of your pin & the word INPUT or OUTPUT
+pinMode(10, OUTPUT); //If your pin is digital you put a number
+pinMode(11, OUTPUT); //If your pin is analog you put a A# EX. A0, A1, A3
+
+//V2
+delay(random(500,2000));  //delay for random time
+Serial.begin(9600);
+pinMode(revleft4, OUTPUT);    // set Motor pins as output
+pinMode(fwdleft5, OUTPUT);
+pinMode(revright6, OUTPUT);
+pinMode(fwdright7, OUTPUT);
+
+pinMode(trigPin, OUTPUT);   // set trig pin as output
+pinMode(echoPin, INPUT);    //set echo pin as input to capture reflected waves
+
+}
+
+void loop() {
+//V1
+//put yout main code here, to run repeatedly:
+digitalWrite(8, HIGH); //Here we set our pin 8 value high meaning our motor will go forwards
+digitalWrite(9, LOW); // In the same moment we turn our pin 9 off
+
+digitalWrite(10, HIGH);// Here we set our pin 10 value high meaning our second motor will go forwards too
+digitalWrite(11, LOW); // Here we turn our pin 11 off
+delay(5000); // a delay of 5 second( 5000ms) is put to let the motors run in their state for 5 seconds
+
+digitalWrite(8, LOW); //Here we set our pin 8 value low meaning our motor will not go forwards anymore
+digitalWrite(9, HIGH); // In the same moment we turn our pin 9 high making it go backwards
+
+digitalWrite(10, LOW); // Here we set our pin 10 value low meaning our second motor will not go forward anymore
+digitalWrite(11, HIGH); // Here we turn our pin 11 high making it go backwards
+delay(1000); // a delay of 5 seconds (5000ms) is put to let the motors run in their state for 5 seconds
+
+//V2
+digitalWrite(trigPin, LOW);
+delayMicroseconds(2);
+digitalWrite(trigPin, HIGH);    // send waves for 10 us
+delayMicroseconds(10);
+duration = pulseIn(echoPin, HIGH); // receive reflected waves
+distance = duration / 58.2;   // convert to distance
+delay(10);
+  // If you dont get proper movements of your robot then alter the pin numbers
+  if (distance > 19)
+  {
+    digitalWrite(fwdright7, HIGH);
+    digitalWrite(revright6, LOW);
+    digitalWrite(fwdleft5, HIGH);
+    digitalWrite(revleft4, LOW);
+    }
+    
+    if (distance < 18)
+    {
+    digitalWrite(fwdright7, LOW);   //Stop
+    digitalWrite(revright6, LOW);
+    digitalWrite(fwdleft5, LOW);
+    digitalWrite(revleft4, LOW);
+    delay(500);
+    digitalWrite(fwdright7, LOW);     //movebackwards
+    digitalWrite(revright6, HIGH);
+    digitalWrite(fwdleft5, LOW);
+    digitalWrite(revleft4, LOW);
+    delay(500);
+    digitalWrite(fwdright7, LOW);   //Stop
+    digitalWrite(revright6, LOW);
+    digitalWrite(fwdleft5, LOW);
+    digitalWrite(revleft4, LOW);
+    delay(100);
+    digitalWrite(fwdright7, HIGH);
+    digitalWrite(revright6, LOW);
+    digitalWrite(revleft4, LOW);
+    digitalWrite(fwdleft5, LOW);
+    delay(500);
+    }
+}
